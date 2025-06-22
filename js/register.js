@@ -4,7 +4,6 @@ if (token !== null) {
   window.location.href = "./dashboard.html";
 }
 
-
 function showNotification(message, type = "error") {
   const id = "notif-" + Date.now(); // unique-id
   const bgColor = type === "error" ? "#f44336" : "#4CAF50";
@@ -26,32 +25,33 @@ function showNotification(message, type = "error") {
   $("#notification-area").append(notification);
 
   setTimeout(() => {
-    $(`#${id}`).fadeOut(500, function () {
+    $(`#${id}`).fadeOut(300, function () {
       $(this).remove();
     });
-  }, 3000);
+  }, 2000);
 }
 
 $(document).ready(function () {
-  
   $("#password-toggle").on("change", function () {
     $("#password").attr("type", this.checked ? "text" : "password");
   });
 
   // form submission:
 
-  $("#login-form").on("submit", function (e) {
+  $("#reg-form").on("submit", function (e) {
     e.preventDefault();
 
     const username = $("#username").val();
+    const fullname = $("#fullname").val();
     const password = $("#password").val();
+    const email = $("#email").val();
 
     // send credentials to server:
     $.ajax({
-      url: "http://localhost:8060/login",
+      url: "http://localhost:8060/register",
       method: "POST",
       contentType: "application/json",
-      data: JSON.stringify({ username, password }),
+      data: JSON.stringify({ username, fullname, password, email }),
       success: function (response) {
         localStorage.setItem("bt_auth_token", response.extra);
         showNotification(response.message, "success");
@@ -64,9 +64,31 @@ $(document).ready(function () {
         if (res.is_feedback) {
           showNotification("Sorry! Something went wrong.", "error");
         } else {
+          console.log(res.message);
           showNotification(res.message, "error");
         }
       },
     });
   });
 });
+
+//Pure password strength checker from GeeksForGeeks | Source: https://www.geeksforgeeks.org/javascript/create-a-password-strength-checker-using-html-css-and-javascript/
+let password = document.getElementById("password");
+let power = document.getElementById("power-point");
+password.oninput = function () {
+  let point = 0;
+  let value = password.value;
+  let widthPower = ["1%", "25%", "50%", "75%", "100%"];
+  let colorPower = ["#D73F40", "#DC6551", "#F2B84F", "#BDE952", "#3ba62f"];
+
+  if (value.length >= 6) {
+    let arrayTest = [/[0-9]/, /[a-z]/, /[A-Z]/, /[^0-9a-zA-Z]/];
+    arrayTest.forEach((item) => {
+      if (item.test(value)) {
+        point += 1;
+      }
+    });
+  }
+  power.style.width = widthPower[point];
+  power.style.backgroundColor = colorPower[point];
+};
