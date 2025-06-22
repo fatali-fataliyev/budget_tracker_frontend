@@ -1,0 +1,17 @@
+.side-item:hover {
+    transition: 70ms ease-in;
+    transform: scale(1.02);
+    background: #F6F6F6;
+}
+
+.nav-link.active {
+    background-color: #007bff !important;
+    /* Bootstrap primary */
+    color: #fff !important;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.nav-link.active i {
+    color: #fff !important;
+}
