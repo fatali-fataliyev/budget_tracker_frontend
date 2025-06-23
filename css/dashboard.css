@@ -1,17 +1,43 @@
+.side-item {
+    position: relative;
+    display: inline-block;
+    /* or block/flex as needed */
+    padding-bottom: 4px;
+    overflow: hidden;
+    /* prevents ::after from leaking */
+    transition: transform 500ms ease-in;
+    border-radius: 5px;
+}
+
+
+.side-item::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    height: 2px;
+    width: 0;
+    background-color: #000;
+    transition: width 400ms ease;
+}
+
+.side-item:hover::after {
+    width: 100%;
+}
+
 .side-item:hover {
-    transition: 70ms ease-in;
-    transform: scale(1.02);
-    background: #F6F6F6;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.nav-link.active {
-    background-color: #007bff !important;
-    /* Bootstrap primary */
-    color: #fff !important;
-    border-radius: 8px;
-    font-weight: bold;
+#logout:hover {
+    cursor: pointer;
+    background-color: #ff4d4f;
+    color: white;
 }
 
-.nav-link.active i {
-    color: #fff !important;
+.report:hover {
+    background-color: #f39c12;
+    color: white;
 }

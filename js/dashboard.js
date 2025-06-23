@@ -25,38 +25,73 @@ function showNotification(message, type = "error") {
   }, 3000);
 }
 
+$.ajaxSetup({
+  beforeSend: function (xhr) {
+    const token = localStorage.getItem("auth_token");
+    if (token) {
+      xhr.setRequestHeader("Authorization", `${token}`);
+    }
+  },
+});
+
 $(document).ready(function () {
-  $("#sidebar-toggle").on("click", function () {});
+  if (!localStorage.getItem("bt_auth_token")) {
+    window.location.href = "/login.html";
+  }
 
-  // form submission:
-
-  $("#login-form").on("submit", function (e) {
-    e.preventDefault();
-
-    const username = $("#username").val();
-    const password = $("#password").val();
-
-    // send credentials to server:
-    $.ajax({
-      url: "http://localhost:8060/login",
-      method: "POST",
-      contentType: "application/json",
-      data: JSON.stringify({ username, password }),
-      success: function (response) {
-        localStorage.setItem("bt_auth_token", response.extra);
-        showNotification(response.message, "success");
-        setTimeout(function () {
-          window.location.href = "./dashboard.html";
-        }, 800);
+  const createDonut = (id, label, data, colors) => {
+    const ctx = document.getElementById(id).getContext("2d");
+    new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: label,
+        datasets: [
+          {
+            data: data,
+            backgroundColor: colors,
+            hoverOffset: 10,
+          },
+        ],
       },
-      error: function (xhr) {
-        const res = xhr.responseJSON;
-        if (res.is_feedback) {
-          showNotification("Sorry! Something went wrong.", "error");
-        } else {
-          showNotification(res.message, "error");
-        }
+      options: {
+        plugins: {
+          legend: {
+            position: "bottom",
+          },
+        },
       },
     });
+  };
+
+  createDonut(
+    "donut1",
+    ["1000+", "500+", "<500"],
+    [3, 2, 1],
+    ["#ff6384", "#36a2eb", "#ffce56"]
+  );
+  createDonut(
+    "donut2",
+    ["1000+", "500+", "<500"],
+    [1, 2, 3],
+    ["#4bc0c0", "#9966ff", "#ff9f40"]
+  );
+  createDonut(
+    "donut3",
+    ["Incomes", "Expenses"],
+    [70, 30],
+    ["#00c853", "#d50000"]
+  );
+
+  // Logout
+
+  $("#logout").on("click", function (e) {
+    e.preventDefault();
+    $("#logoutModal").modal("show");
+  });
+
+  $("#confirmLogout").on("click", function () {
+    $("#logoutModal").modal("hide");
+    localStorage.removeItem("bt_auth_token");
+    window.location.href = "/index.html";
   });
 });
