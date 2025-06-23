@@ -1,0 +1,43 @@
+.side-item {
+    position: relative;
+    display: inline-block;
+    /* or block/flex as needed */
+    padding-bottom: 4px;
+    overflow: hidden;
+    /* prevents ::after from leaking */
+    transition: transform 500ms ease-in;
+    border-radius: 5px;
+}
+
+
+.side-item::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    height: 2px;
+    width: 0;
+    background-color: #000;
+    transition: width 400ms ease;
+}
+
+.side-item:hover::after {
+    width: 100%;
+}
+
+.side-item:hover {
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#logout:hover {
+    cursor: pointer;
+    background-color: #ff4d4f;
+    color: white;
+}
+
+.report:hover {
+    background-color: #f39c12;
+    color: white;
+}
