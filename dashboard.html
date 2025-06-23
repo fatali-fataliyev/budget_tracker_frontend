@@ -22,6 +22,16 @@
     <link rel="stylesheet" href="./css/dashboard.css" />
   </head>
   <body>
+    <div
+      id="notification-area"
+      style="
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+      "
+    ></div>
     <!-- Logout Confirm Modal -->
     <div
       class="modal fade"
@@ -131,15 +141,15 @@
           <!-- Donut Charts Row -->
           <div class="row text-center">
             <div class="col-md-4 mb-4">
-              <canvas id="donut1" width="200" height="200"></canvas>
-              <p class="mt-2">Expenses</p>
+              <canvas id="expense-donut" width="200" height="200"></canvas>
+              <p class="mt-2">Expenses by Max Amount</p>
             </div>
             <div class="col-md-4 mb-4">
-              <canvas id="donut2" width="200" height="200"></canvas>
-              <p class="mt-2">Incomes</p>
+              <canvas id="income-donut" width="200" height="200"></canvas>
+              <p class="mt-2">Incomes by Target Amount</p>
             </div>
             <div class="col-md-4 mb-4">
-              <canvas id="donut3" width="200" height="200"></canvas>
+              <canvas id="txn-donut" width="200" height="200"></canvas>
               <p class="mt-2">Transactions</p>
             </div>
           </div>

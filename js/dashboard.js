@@ -25,21 +25,115 @@ function showNotification(message, type = "error") {
   }, 3000);
 }
 
+if (!localStorage.getItem("bt_auth_token")) {
+  window.location.href = "/login.html";
+}
+
 $.ajaxSetup({
   beforeSend: function (xhr) {
-    const token = localStorage.getItem("auth_token");
+    const token = localStorage.getItem("bt_auth_token");
     if (token) {
       xhr.setRequestHeader("Authorization", `${token}`);
     }
   },
 });
 
-$(document).ready(function () {
-  if (!localStorage.getItem("bt_auth_token")) {
-    window.location.href = "/login.html";
-  }
+const EXP_STATS_URL = "http://localhost:8060/statistics/expense";
+const INC_STATS_URL = "http://localhost:8060/statistics/income";
+const TXN_STATS_URL = "http://localhost:8060/statistics/transaction";
 
-  const createDonut = (id, label, data, colors) => {
+$(document).ready(function () {
+  $.ajax({
+    url: EXP_STATS_URL,
+    type: "GET",
+    success: function (data) {
+      const labels = ["1000+", "500–1000", "Under 500"];
+      const values = [
+        data.more_than_1000,
+        data.between_500_and_1000,
+        data.less_than_500,
+      ];
+
+      createDonut("expense-donut", labels, values, [
+        "#E63946",
+        "#457B9D",
+        "#F1FAEE",
+      ]);
+    },
+    error: function (err) {
+      const message = err.responseJSON?.message || "Error occurred";
+      showNotification(message);
+
+      let isAuthErr = err.responseJSON?.code === "UNAUTHORIZED";
+      if (isAuthErr) {
+        console.warn("Auth error!");
+        localStorage.removeItem("bt_auth_token");
+        setTimeout(() => {
+          window.location.href = "/login.html";
+        }, 5000);
+      }
+    },
+  });
+
+  $.ajax({
+    url: INC_STATS_URL,
+    type: "GET",
+    success: function (data) {
+      const labels = ["1000+", "500-1000", "<500"];
+      const values = [
+        data.more_than_1000,
+        data.between_500_and_1000,
+        data.less_than_500,
+      ];
+
+      createDonut("income-donut", labels, values, [
+        "#ff6384",
+        "#36a2eb",
+        "#ffce56",
+      ]);
+    },
+    error: function (err) {
+      const message = err.responseJSON?.message || "Error occurred";
+      showNotification(message);
+
+      let isAuthErr = err.responseJSON?.code === "UNAUTHORIZED";
+      if (isAuthErr) {
+        console.warn("Auth error!");
+        localStorage.removeItem("bt_auth_token");
+        setTimeout(() => {
+          window.location.href = "/login.html";
+        }, 5000);
+      }
+    },
+  });
+
+  $.ajax({
+    url: TXN_STATS_URL,
+    type: "GET",
+    success: function (data) {
+      const labels = ["Expenses", "Incomes"];
+      const values = [data.expenses, data.incomes];
+
+      createDonut("txn-donut", labels, values, ["#E76F51", "#2A9D8F"]);
+    },
+    error: function (err) {
+      const message = err.responseJSON?.message || "Error occurred";
+      showNotification(message);
+
+      let isAuthErr = err.responseJSON?.code === "UNAUTHORIZED";
+      if (isAuthErr) {
+        console.warn("Auth error!");
+        localStorage.removeItem("bt_auth_token");
+        setTimeout(() => {
+          window.location.href = "/login.html";
+        }, 5000);
+      }
+    },
+  });
+
+  //Statistics donut
+
+  function createDonut(id, label, data, colors) {
     const ctx = document.getElementById(id).getContext("2d");
     new Chart(ctx, {
       type: "doughnut",
@@ -61,26 +155,7 @@ $(document).ready(function () {
         },
       },
     });
-  };
-
-  createDonut(
-    "donut1",
-    ["1000+", "500+", "<500"],
-    [3, 2, 1],
-    ["#ff6384", "#36a2eb", "#ffce56"]
-  );
-  createDonut(
-    "donut2",
-    ["1000+", "500+", "<500"],
-    [1, 2, 3],
-    ["#4bc0c0", "#9966ff", "#ff9f40"]
-  );
-  createDonut(
-    "donut3",
-    ["Incomes", "Expenses"],
-    [70, 30],
-    ["#00c853", "#d50000"]
-  );
+  }
 
   // Logout
 
