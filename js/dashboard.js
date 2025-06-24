@@ -79,7 +79,7 @@ $(document).ready(function () {
     url: INC_STATS_URL,
     type: "GET",
     success: function (data) {
-      const labels = ["1000+", "500-1000", "<500"];
+      const labels = ["1000+", "500-1000", "Under 500"];
       const values = [
         data.more_than_1000,
         data.between_500_and_1000,

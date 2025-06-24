@@ -1,3 +1,23 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+.full-height-container {
+    height: 100%;
+}
+
+@media (min-width: 768px) {
+    #sidebar {
+        height: 100vh;
+        overflow-y: auto;
+        position: sticky;
+        top: 0;
+    }
+}
+
+
 .side-item {
     position: relative;
     display: inline-block;
