@@ -2,7 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <style>
+      * {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+      }
+      html {
+        touch-action: manipulation;
+      }
+    </style>
     <title>Budget Tracker | Dashboard</title>
 
     <!-- Bootstrap -->
@@ -19,7 +31,7 @@
 
     <!-- Favicon -->
     <link rel="icon" href="./images/favicon/favicon-32x32.png" />
-    <link rel="stylesheet" href="./css/dashboard.css" />
+    <link rel="stylesheet" href="./css/sidebar.css" />
   </head>
   <body>
     <div
@@ -69,8 +81,8 @@
       </div>
     </div>
 
-    <div class="container-fluid">
-      <div class="row">
+    <div class="container-fluid full-height-container">
+      <div class="row flex-grow-1 w-100">
         <!-- Sidebar -->
         <nav
           id="sidebar"

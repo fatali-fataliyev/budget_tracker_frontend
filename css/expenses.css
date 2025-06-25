@@ -1,0 +1,109 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+#categories {
+    flex: 1;
+    /* Take remaining vertical space */
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    /* Optional for visual */
+}
+
+
+.category-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+    margin-top: 14.5px;
+    margin-bottom: 14.5px;
+    cursor: pointer;
+    position: relative;
+}
+
+.category-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.toggle-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.toggle-text.expanded {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: initial;
+}
+
+.category-max-amount {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.icon-btn {
+    border: 1px solid transparent;
+    background: none;
+    padding: 4px 6px;
+    border-radius: 5px;
+    transition: border 0.2s, background-color 0.2s;
+    cursor: pointer;
+}
+
+.icon-btn:hover,
+.icon-btn:focus {
+    border-color: rgba(0, 0, 0, 0.1);
+    /* subtle border on hover */
+    background-color: rgba(0, 0, 0, 0.02);
+    /* optional tiny highlight */
+}
+
+.icon-btn i {
+    font-size: 14px;
+}
+
+
+
+.expired-stamp {
+    position: absolute;
+    right: -15px;
+    top: -5px;
+    transform: rotate(45deg);
+    width: 150px;
+    z-index: 9999;
+    opacity: 0.9;
+    /* pointer-events removed */
+}
+
+.expired-stamp img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+    transition: opacity 0.3s ease;
+}
+
+/* Hide on hover */
+.expired-stamp:hover img {
+    opacity: 0;
+}
