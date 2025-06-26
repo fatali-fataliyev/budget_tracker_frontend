@@ -43,29 +43,18 @@ function updateCategories(categories) {
   $container.empty();
 
   categories.forEach((cat) => {
-    const isExpired = cat.is_expired;
     const usagePercent = cat.usage_percent;
 
     const card = `
         <div class="category-card">
-          ${
-            isExpired
-              ? `<div class="expired-stamp"><img src="../images/items/expired_stamp.png" alt="Expired Stamp" /></div>`
-              : ""
-          }
-
           <div class="d-flex justify-content-between mb-4">
             <h4 class="category-name toggle-text" id="category-name">${
               cat.name
             }</h4>
             <div class="d-flex justify-content-between">
-              <div title="Expire days" class="me-4">
-                <i class="fa-solid fa-calendar-days"></i>
-                <span class="category-days">${cat.period_day}</span>
-              </div>
-              <div title="Maxiumum Amount" class="me-4">
-                <i class="fa-solid fa-chart-simple"></i>
-                <span class="category-max">${cat.max_amount}</span>
+              <div title="Target Amount" class="me-4">
+                <i class="fa-solid fa-bullseye"></i>
+                <span class="category-target">${cat.target_amount}</span>
               </div>
               <div title="Amount">
                 <i class="fa-solid fa-dollar-sign"></i>
@@ -136,29 +125,18 @@ function getCategories() {
       $container.empty();
 
       categories.forEach((cat) => {
-        const isExpired = cat.is_expired;
         const usagePercent = cat.usage_percent;
 
         const card = `
         <div class="category-card">
-          ${
-            isExpired
-              ? `<div class="expired-stamp"><img src="../images/items/expired_stamp.png" alt="Expired Stamp" /></div>`
-              : ""
-          }
-
           <div class="d-flex justify-content-between mb-4">
             <h4 class="category-name toggle-text" id="category-name">${
               cat.name
             }</h4>
             <div class="d-flex justify-content-between">
-              <div title="Expire days" class="me-4">
-                <i class="fa-solid fa-calendar-days"></i>
-                <span class="category-days">${cat.period_day}</span>
-              </div>
-              <div title="Maxiumum Amount" class="me-4">
-                <i class="fa-solid fa-chart-simple"></i>
-                <span class="category-max">${cat.max_amount}</span>
+              <div title="Target Amount" class="me-4">
+                <i class="fa-solid fa-bullseye"></i>
+                <span class="category-target">${cat.target_amount}</span>
               </div>
               <div title="Amount">
                 <i class="fa-solid fa-dollar-sign"></i>
@@ -234,7 +212,7 @@ function getCategories() {
   });
 }
 
-const URL = "http://localhost:8060/category/expense";
+const URL = "http://localhost:8060/category/income";
 
 function getUsagePercentColor(percent) {
   if (percent >= 90) {
@@ -247,12 +225,6 @@ function getUsagePercentColor(percent) {
 }
 
 $(document).ready(function () {
-  const $img = $(".expired-stamp img");
-  // Tap/click for mobile expired stamp
-  $img.on("click touchstart", function () {
-    $(this).css("opacity", "0");
-  });
-
   // Load categories
   getCategories();
 
@@ -265,14 +237,12 @@ $(document).ready(function () {
   });
 
   // Add category
-
   $("#addCategoryForm").on("submit", function (e) {
     e.preventDefault();
 
     const newCategory = {
       name: $("#categoryName").val(),
-      max_amount: parseFloat($("#maxAmount").val(), 10),
-      period_day: parseInt($("#periodDay").val(), 10),
+      target_amount: parseFloat($("#targetAmount").val(), 10),
       note: $("#categoryNote").val(),
     };
 
@@ -305,16 +275,19 @@ $(document).ready(function () {
 
     const filterData = {
       names: $("#names").val(),
-      max_amount: $("#max_amount").val(),
-      period_day: $("#period_day").val(),
+      target_amount: $("#target_amount").val(),
       created_at: $("#created_at").val(),
       end_date: $("#end_date").val(),
     };
+
+    console.log(filterData);
 
     const queryString = new URLSearchParams(filterData).toString();
 
     $.get(`${URL}?${queryString}`, function (data) {
       updateCategories(data.categories);
+    }).fail(function (error) {
+      showNotification(error.responseJSON.message);
     });
 
     console.log("Filter values:", filterData);
@@ -361,19 +334,16 @@ $(document).ready(function () {
     currentEditCategoryId = $(this).data("cid");
 
     $("#editCategoryId").val(currentEditCategoryId);
+
     const categoryName = $(this)
       .closest(".category-card")
       .find(".category-name")
       .text()
       .trim();
-    console.log(categoryName);
 
     $("#editName").val(categoryName);
-    $("#editMaxAmount").val(
-      $card.find('[title="Maxiumum Amount"] span').text().trim()
-    );
-    $("#editPeriodDay").val(
-      $card.find('[title="Expire days"] span').text().trim()
+    $("#editTargetAmount").val(
+      $card.find('[title="Target Amount"] span').text().trim()
     );
     $("#editNote").val($card.find("#note").text().trim());
     $("#editCategoryModal").modal("show");
@@ -385,8 +355,7 @@ $(document).ready(function () {
     const updatedCategory = {
       id: $("#editCategoryId").val(),
       new_name: $("#editName").val(),
-      new_max_amount: parseFloat($("#editMaxAmount").val()),
-      new_period_day: parseInt($("#editPeriodDay").val(), 10),
+      new_target_amount: parseFloat($("#editTargetAmount").val()),
       new_note: $("#editNote").val(),
     };
 
@@ -420,8 +389,7 @@ $(document).ready(function () {
 
         $card.find(".category-name").text(updatedCategory.name);
         $card.find(".category-amount").text(`${updatedCategory.amount}`);
-        $card.find(".category-max").text(`${updatedCategory.max_amount}`);
-        $card.find(".category-days").text(`${updatedCategory.period_day}`);
+        $card.find(".category-target").text(`${updatedCategory.target_amount}`);
         $card.find(".category-note").text(updatedCategory.note);
         $card
           .find(".progress-bar")
@@ -430,12 +398,6 @@ $(document).ready(function () {
           .find(".progress-bar")
           .css("width", `${updatedCategory.usage_percent}%`)
           .text(`${updatedCategory.usage_percent}%`);
-
-        if (updatedCategory.is_expired) {
-          $card.find(".expired-stamp").show();
-        } else {
-          $card.find(".expired-stamp").hide();
-        }
 
         $card
           .find(".category-created-at")
@@ -453,7 +415,7 @@ $(document).ready(function () {
         currentEditCategoryId = null;
       },
       error: function (error) {
-        showNotification(error.responseJSON.message);
+        showNotification(error.message);
       },
     });
 
