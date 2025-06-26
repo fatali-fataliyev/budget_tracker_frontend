@@ -216,6 +216,7 @@ function getCategories() {
       `;
 
         $container.append(card);
+        //Toggle-text
       });
     },
     error: function (err) {
@@ -255,15 +256,6 @@ $(document).ready(function () {
 
   // Load categories
   getCategories();
-
-  //Toggle-text
-
-  document.querySelectorAll(".toggle-text").forEach((el) => {
-    el.addEventListener("click", () => {
-      el.classList.toggle("expanded");
-    });
-  });
-
   // Add category
 
   $("#addCategoryForm").on("submit", function (e) {
