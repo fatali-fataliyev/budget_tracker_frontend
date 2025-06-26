@@ -15,7 +15,7 @@
         touch-action: manipulation;
       }
     </style>
-    <title>Budget Tracker | Expenses</title>
+    <title>Budget Tracker | Incomes</title>
 
     <!-- Bootstrap -->
     <link
@@ -32,7 +32,7 @@
     <!-- Favicon -->
     <link rel="icon" href="./images/favicon/favicon-32x32.png" />
     <link rel="stylesheet" href="./css/sidebar.css" />
-    <link rel="stylesheet" href="./css/expenses.css" />
+    <link rel="stylesheet" href="./css/incomes.css" />
   </head>
   <body>
     <!-- Add Category Trigger button -->
@@ -177,7 +177,7 @@
 
           <div class="text-center py-4">
             <img src="./images/logo/logo.png" width="120" alt="Logo" />
-            <h2>Expenses</h2>
+            <h2>Incomes</h2>
             <hr />
           </div>
 
@@ -262,38 +262,22 @@
                   id="categoryName"
                   name="name"
                   required
-                  placeholder="Travel"
+                  placeholder="Business"
                   maxlength="255"
                 />
               </div>
 
               <div class="mb-3">
-                <label for="maxAmount" class="form-label"
-                  >Max Amount<span style="color: red">*</span></label
+                <label for="targetAmount" class="form-label"
+                  >Target Amount</label
                 >
                 <input
                   type="number"
                   class="form-control"
-                  id="maxAmount"
-                  name="max_amount"
-                  required
+                  id="targetAmount"
+                  name="target_amount"
                   min="1"
-                  placeholder="2000"
-                />
-              </div>
-
-              <div class="mb-3">
-                <label for="periodDay" class="form-label"
-                  >Period (in days)</label
-                >
-                <input
-                  type="number"
-                  class="form-control"
-                  id="periodDay"
-                  name="period_day"
-                  required
-                  min="1"
-                  placeholder="7"
+                  placeholder="5000"
                 />
               </div>
 
@@ -304,7 +288,7 @@
                   id="categoryNote"
                   name="note"
                   rows="3"
-                  placeholder="Newyork, Tallinn, Paris, Berlin"
+                  placeholder="Expected income from selling chinese qr-code readers."
                 ></textarea>
               </div>
             </div>
@@ -356,30 +340,20 @@
                   class="form-control"
                   id="names"
                   name="names"
-                  placeholder="home, clothes"
+                  placeholder="freelance, business"
                   required
                 />
               </div>
               <div class="mb-3">
-                <label for="max_amount" class="form-label">Max Amount</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="max_amount"
-                  name="max_amount"
-                  placeholder="500"
-                />
-              </div>
-              <div class="mb-3">
-                <label for="period_day" class="form-label"
-                  >Period (in days)</label
+                <label for="target_amount" class="form-label"
+                  >Target Amount</label
                 >
                 <input
                   type="number"
                   class="form-control"
-                  id="period_day"
-                  name="period_day"
-                  placeholder="7"
+                  id="target_amount"
+                  name="target_amount"
+                  placeholder="500"
                 />
               </div>
 
@@ -450,24 +424,13 @@
               </div>
 
               <div class="mb-3">
-                <label for="editMaxAmount" class="form-label">Max Amount</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="editMaxAmount"
-                  min="0"
-                  required
-                />
-              </div>
-
-              <div class="mb-3">
-                <label for="editPeriodDay" class="form-label"
-                  >Period (Days)</label
+                <label for="editTargetAmount" class="form-label"
+                  >Target Amount</label
                 >
                 <input
                   type="number"
                   class="form-control"
-                  id="editPeriodDay"
+                  id="editTargetAmount"
                   min="0"
                   required
                 />
@@ -498,6 +461,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="./js/expenses.js"></script>
+    <script src="./js/incomes.js"></script>
   </body>
 </html>
