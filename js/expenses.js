@@ -39,6 +39,11 @@ $.ajaxSetup({
 });
 
 function updateCategories(categories) {
+  if (categories.length === 0) {
+    showNotification("No results found");
+    return;
+  }
+
   const $container = $("#categories");
   $container.empty();
 
@@ -307,6 +312,8 @@ $(document).ready(function () {
 
     $.get(`${URL}?${queryString}`, function (data) {
       updateCategories(data.categories);
+    }).fail(function (error) {
+      showNotification(error.responseJSON.message);
     });
 
     console.log("Filter values:", filterData);

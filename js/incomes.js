@@ -39,6 +39,10 @@ $.ajaxSetup({
 });
 
 function updateCategories(categories) {
+  if (categories.length === 0) {
+    showNotification("No results found");
+    return;
+  }
   const $container = $("#categories");
   $container.empty();
 
