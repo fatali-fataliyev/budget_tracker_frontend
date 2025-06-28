@@ -49,7 +49,9 @@ function updateTransactions(transactions) {
     return;
   }
 
-  const $container = $("#transcations");
+  console.log("filtered transcations: ", transactions);
+
+  const $container = $("#transactions");
   $container.empty();
 
   transactions.forEach((txn) => {
@@ -309,7 +311,7 @@ function populateCurrencies() {
 }
 
 $("#filterBtn").on("click", function () {
-  const $currency = $("#currencyFilter");
+  const $currency = $("#filterCurrency");
   $currency.empty();
   const added = new Set();
 
@@ -374,23 +376,60 @@ $(document).ready(function () {
     e.preventDefault();
 
     const filterData = {
-      names: $("#names").val(),
-      target_amount: $("#target_amount").val(),
+      category_names: $("#names").val(),
+      amount: $("#filterAmount").val(),
+      currency: $("#filterCurrency").val(),
       created_at: $("#created_at").val(),
-      end_date: $("#end_date").val(),
+      category_type: $("#category-type").val(),
     };
-
-    console.log(filterData);
 
     const queryString = new URLSearchParams(filterData).toString();
 
-    $.get(`${URL}?${queryString}`, function (data) {
-      updateCategories(data.categories);
+    $.get(`${TXN_POST_GET_URL}?${queryString}`, function (data) {
+      updateTransactions(data.transactions);
     }).fail(function (error) {
-      showNotification(error.responseJSON.message);
+      console.log(error);
     });
 
-    console.log("Filter values:", filterData);
     $("#filterModal").modal("hide");
+  });
+
+  $("#uploadBtn").on("click", function () {
+    const fileInput = $("#txnImage")[0];
+    const file = fileInput.files[0];
+
+    if (!file) {
+      showNotification("Please select an image to upload.");
+      return;
+    }
+
+    if (file.size > 1024 * 1024) {
+      showNotification("Image must be less than 1MB.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    $("#loadingSpinner").removeClass("d-none");
+
+    $.ajax({
+      url: `${IMG_TO_TXN_URL}`,
+      method: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (response) {
+        console.log("Upload success:", response);
+
+        $("#imageToTxnModal").modal("hide");
+        $("#loadingSpinner").addClass("d-none");
+      },
+      error: function (xhr, status, error) {
+        const errMsg = xhr.responseJSON?.message || "Something went wrong!";
+        showNotification(errMsg);
+        $("#loadingSpinner").addClass("d-none");
+      },
+    });
   });
 });
