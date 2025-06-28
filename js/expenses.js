@@ -39,6 +39,11 @@ $.ajaxSetup({
 });
 
 function updateCategories(categories) {
+  if (categories.length === 0) {
+    showNotification("No results found");
+    return;
+  }
+
   const $container = $("#categories");
   $container.empty();
 
@@ -216,6 +221,7 @@ function getCategories() {
       `;
 
         $container.append(card);
+        //Toggle-text
       });
     },
     error: function (err) {
@@ -255,15 +261,6 @@ $(document).ready(function () {
 
   // Load categories
   getCategories();
-
-  //Toggle-text
-
-  document.querySelectorAll(".toggle-text").forEach((el) => {
-    el.addEventListener("click", () => {
-      el.classList.toggle("expanded");
-    });
-  });
-
   // Add category
 
   $("#addCategoryForm").on("submit", function (e) {
@@ -315,6 +312,8 @@ $(document).ready(function () {
 
     $.get(`${URL}?${queryString}`, function (data) {
       updateCategories(data.categories);
+    }).fail(function (error) {
+      showNotification(error.responseJSON.message);
     });
 
     console.log("Filter values:", filterData);

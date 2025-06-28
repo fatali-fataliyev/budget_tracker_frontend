@@ -15,7 +15,6 @@ main {
     flex: 1;
     /* Take remaining vertical space */
     overflow-y: auto;
-    overflow-x: hidden;
     padding: 1rem;
     background-color: #f9f9f9;
     margin-bottom: 10px;
