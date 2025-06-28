@@ -432,4 +432,14 @@ $(document).ready(function () {
       },
     });
   });
+  $("#logout").on("click", function (e) {
+    e.preventDefault();
+    $("#logoutModal").modal("show");
+  });
+
+  $("#confirmLogout").on("click", function () {
+    $("#logoutModal").modal("hide");
+    localStorage.removeItem("bt_auth_token");
+    window.location.href = "/index.html";
+  });
 });
