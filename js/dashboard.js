@@ -37,7 +37,7 @@ $.ajaxSetup({
     }
   },
 });
-
+// TODO: Baseurl
 const EXP_STATS_URL = "http://localhost:8060/statistics/expense";
 const INC_STATS_URL = "http://localhost:8060/statistics/income";
 const TXN_STATS_URL = "http://localhost:8060/statistics/transaction";
@@ -114,7 +114,7 @@ $(document).ready(function () {
       const labels = ["Expenses", "Incomes"];
       const values = [data.expenses, data.incomes];
 
-      createDonut("txn-donut", labels, values, ["#E76F51", "#2A9D8F"]);
+      createDonut("txn-donut", labels, values, ["#E76F51", "#2A9D8F"]); //TODO
     },
     error: function (err) {
       const message = err.responseJSON?.message || "Error occurred";

@@ -240,7 +240,7 @@ function getCategories() {
   });
 }
 
-const URL = "http://localhost:8060/category/expense";
+const URL = "category/expense";
 
 function getUsagePercentColor(percent) {
   if (percent >= 90) {

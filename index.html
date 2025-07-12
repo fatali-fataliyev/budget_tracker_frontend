@@ -48,6 +48,48 @@
     <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="alreadyLoggedModal"
+      tabindex="-1"
+      aria-labelledby="alreadyLoggedModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content border-success">
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title" id="alreadyLoggedModalLabel">Notice</h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              You're already logged in. Do you want to be redirected to the
+              dashboard?
+            </p>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="rememberChoiceCheckbox"
+              />
+              <label class="form-check-label" for="rememberChoiceCheckbox">
+                Remember my choice
+              </label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="okRedirectBtn" class="btn btn-success">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <header>
       <nav class="navbar navbar-expand-lg glass-navbar px-4 py-2">
         <div class="container-fluid">
@@ -163,6 +205,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <script src="./js/script.js" type="text/javascript"></script>
+    <script src="./js/config.js" type="text/javascript"></script>
+    <script src="./js/index.js" type="text/javascript"></script>
   </body>
 </html>
