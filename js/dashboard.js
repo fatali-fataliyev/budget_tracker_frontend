@@ -25,8 +25,14 @@ function showNotification(message, type = "error") {
   }, 3000);
 }
 
-if (!localStorage.getItem("bt_auth_token")) {
+let token = localStorage.getItem("bt_auth_token");
+
+if (!token) {
   window.location.href = "/login.html";
+} else {
+  $.ajax({
+    url: `${BASE_URL}`,
+  });
 }
 
 $.ajaxSetup({
