@@ -31,7 +31,23 @@ if (!token) {
   window.location.href = "/login.html";
 } else {
   $.ajax({
-    url: `${BASE_URL}`,
+    url: `${BASE_URL}/check-token`,
+    type: "GET",
+    headers: {
+      Authorization: `${token}`,
+    },
+    success: function (response) {
+      console.log(response, "token is valid");
+    },
+    error: function () {
+      localStorage.removeItem("bt_auth_token");
+      localStorage.removeItem("rememberRedirect");
+      showNotification("Please login again.");
+      setTimeout(() => {
+        window.location.href = "/login.html";
+      }, 1000);
+      return;
+    },
   });
 }
 
@@ -43,14 +59,10 @@ $.ajaxSetup({
     }
   },
 });
-// TODO: Baseurl
-const EXP_STATS_URL = "http://localhost:8060/statistics/expense";
-const INC_STATS_URL = "http://localhost:8060/statistics/income";
-const TXN_STATS_URL = "http://localhost:8060/statistics/transaction";
 
 $(document).ready(function () {
   $.ajax({
-    url: EXP_STATS_URL,
+    url: `${BASE_URL}/statistics/expense`,
     type: "GET",
     success: function (data) {
       const labels = ["1000+", "500–1000", "Under 500"];
@@ -82,7 +94,7 @@ $(document).ready(function () {
   });
 
   $.ajax({
-    url: INC_STATS_URL,
+    url: `${BASE_URL}/statistics/income`,
     type: "GET",
     success: function (data) {
       const labels = ["1000+", "500-1000", "Under 500"];
@@ -114,13 +126,13 @@ $(document).ready(function () {
   });
 
   $.ajax({
-    url: TXN_STATS_URL,
+    url: `${BASE_URL}/statistics/transaction`,
     type: "GET",
     success: function (data) {
       const labels = ["Expenses", "Incomes"];
       const values = [data.expenses, data.incomes];
 
-      createDonut("txn-donut", labels, values, ["#E76F51", "#2A9D8F"]); //TODO
+      createDonut("txn-donut", labels, values, ["#E76F51", "#2A9D8F"]);
     },
     error: function (err) {
       const message = err.responseJSON?.message || "Error occurred";
@@ -173,6 +185,7 @@ $(document).ready(function () {
   $("#confirmLogout").on("click", function () {
     $("#logoutModal").modal("hide");
     localStorage.removeItem("bt_auth_token");
+    localStorage.removeItem("rememberRedirect");
     window.location.href = "/index.html";
   });
 });
