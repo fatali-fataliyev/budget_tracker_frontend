@@ -37,7 +37,7 @@ if (!token) {
       Authorization: `${token}`,
     },
     success: function (response) {
-      console.log(response, "token is valid");
+      console.log("token is valid");
     },
     error: function () {
       localStorage.removeItem("bt_auth_token");

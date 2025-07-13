@@ -25,8 +25,30 @@ function showNotification(message, type = "error") {
   }, 3000);
 }
 
-if (!localStorage.getItem("bt_auth_token")) {
+let token = localStorage.getItem("bt_auth_token");
+
+if (!token) {
   window.location.href = "/login.html";
+} else {
+  $.ajax({
+    url: `${BASE_URL}/check-token`,
+    type: "GET",
+    headers: {
+      Authorization: `${token}`,
+    },
+    success: function (response) {
+      console.log("token is valid");
+    },
+    error: function () {
+      localStorage.removeItem("bt_auth_token");
+      localStorage.removeItem("rememberRedirect");
+      showNotification("Please login again.");
+      setTimeout(() => {
+        window.location.href = "/login.html";
+      }, 1000);
+      return;
+    },
+  });
 }
 
 $.ajaxSetup({
@@ -131,9 +153,11 @@ function updateCategories(categories) {
   });
 }
 
+const EXP_URL = "category/expense";
+
 function getCategories() {
   $.ajax({
-    url: URL,
+    url: `${BASE_URL}${EXP_URL}`,
     type: "GET",
     success: function (data) {
       const categories = data.categories;
@@ -240,8 +264,6 @@ function getCategories() {
   });
 }
 
-const URL = "category/expense";
-
 function getUsagePercentColor(percent) {
   if (percent >= 90) {
     return "bg-danger";
@@ -254,13 +276,13 @@ function getUsagePercentColor(percent) {
 
 $(document).ready(function () {
   const $img = $(".expired-stamp img");
-  // Tap/click for mobile expired stamp
   $img.on("click touchstart", function () {
     $(this).css("opacity", "0");
   });
 
-  // Load categories
+  // Load exist categories
   getCategories();
+
   // Add category
 
   $("#addCategoryForm").on("submit", function (e) {
@@ -276,7 +298,7 @@ $(document).ready(function () {
     console.log("Adding new category:", newCategory);
 
     $.ajax({
-      url: `${URL}`,
+      url: `${BASE_URL}${EXP_URL}`,
       method: "POST",
       contentType: "application/json",
       data: JSON.stringify(newCategory),
@@ -310,7 +332,7 @@ $(document).ready(function () {
 
     const queryString = new URLSearchParams(filterData).toString();
 
-    $.get(`${URL}?${queryString}`, function (data) {
+    $.get(`${BASE_URL}${EXP_URL}?${queryString}`, function (data) {
       updateCategories(data.categories);
     }).fail(function (error) {
       showNotification(error.responseJSON.message);
@@ -332,7 +354,7 @@ $(document).ready(function () {
   $("#confirmDeleteBtn").on("click", function () {
     if (selectedCategoryId) {
       $.ajax({
-        url: `${URL}/${selectedCategoryId}`,
+        url: `${BASE_URL}${EXP_URL}/${selectedCategoryId}`,
         method: "DELETE",
         success: function (response) {
           showNotification(response.message, "success");
@@ -399,7 +421,7 @@ $(document).ready(function () {
     }
 
     $.ajax({
-      url: URL,
+      url: `${BASE_URL}${EXP_URL}`,
       method: "PUT",
       contentType: "application/json",
       data: JSON.stringify(updatedCategory),
@@ -469,6 +491,7 @@ $(document).ready(function () {
   $("#confirmLogout").on("click", function () {
     $("#logoutModal").modal("hide");
     localStorage.removeItem("bt_auth_token");
+    localStorage.removeItem("rememberRedirect");
     window.location.href = "/index.html";
   });
 });

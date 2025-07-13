@@ -11,6 +11,15 @@ main {
     overflow: hidden;
 }
 
+#filter-form-container {
+    border-bottom: 1px solid #eee;
+    background-color: #f9f9f9;
+}
+
+#filterForm {
+    background-color: blue;
+}
+
 #categories {
     flex: 1;
     /* Take remaining vertical space */

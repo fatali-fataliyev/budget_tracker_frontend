@@ -48,19 +48,6 @@
       <span>Add</span>
     </button>
 
-    <!-- Filter Trigger Button -->
-
-    <button
-      type="button"
-      class="btn btn-warning"
-      data-bs-toggle="modal"
-      data-bs-target="#filterModal"
-      style="position: fixed; top: 80px; right: 20px; z-index: 1050"
-    >
-      <i class="fa-solid fa-sliders"></i>
-      <span>Filter</span>
-    </button>
-
     <!-- Notification -->
     <div
       id="notification-area"
@@ -147,11 +134,6 @@
                 </a>
               </li>
               <li class="nav-item side-item">
-                <a class="nav-link report" href="./report.html">
-                  <i class="fa-solid fa-bug"></i> Report
-                </a>
-              </li>
-              <li class="nav-item side-item">
                 <a class="nav-link" id="logout">
                   <i class="fa-solid fa-right-from-bracket"></i> Logout
                 </a>
@@ -179,6 +161,104 @@
             <img src="./images/logo/logo.png" width="120" alt="Logo" />
             <h2>Expenses</h2>
             <hr />
+          </div>
+
+          <!-- Filter form -->
+
+          <div id="filter-form-container">
+            <!-- Hamburger Button -->
+            <div class="d-flex justify-content-between align-items-center">
+              <button
+                class="btn btn-outline-primary d-md-none"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#filterBar"
+              >
+                <i class="fa-solid fa-bars"></i> Filter
+              </button>
+            </div>
+
+            <!-- Filter Form -->
+            <div class="collapse d-md-block" id="filterBar">
+              <form
+                id="filterForm"
+                class="p-3 bg-light rounded shadow-sm d-flex flex-wrap align-items-end gap-3"
+              >
+                <!-- Names -->
+                <div class="flex-grow-1">
+                  <label for="names" class="form-label mb-1">
+                    Names <span class="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="names"
+                    name="names"
+                    placeholder="home, clothes"
+                    required
+                  />
+                </div>
+
+                <!-- Max Amount -->
+                <div>
+                  <label for="max_amount" class="form-label mb-1"
+                    >Max Amount</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="max_amount"
+                    name="max_amount"
+                    placeholder="500"
+                  />
+                </div>
+
+                <!-- Period Day -->
+                <div>
+                  <label for="period_day" class="form-label mb-1"
+                    >Period (in days)</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="period_day"
+                    name="period_day"
+                    placeholder="7"
+                  />
+                </div>
+
+                <!-- Start Date -->
+                <div>
+                  <label for="created_at" class="form-label mb-1"
+                    >Start Date</label
+                  >
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="created_at"
+                    name="created_at"
+                  />
+                </div>
+
+                <!-- End Date -->
+                <div>
+                  <label for="end_date" class="form-label mb-1">End Date</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="end_date"
+                    name="end_date"
+                  />
+                </div>
+
+                <!-- Submit -->
+                <div>
+                  <button type="submit" class="btn btn-success">
+                    <i class="fa-solid fa-magnifying-glass"></i> Get
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
 
           <!-- Categories -->
@@ -284,7 +364,7 @@
 
               <div class="mb-3">
                 <label for="periodDay" class="form-label"
-                  >Period (in days)</label
+                  >Period (in days)<span style="color: red">*</span></label
                 >
                 <input
                   type="number"
@@ -322,96 +402,6 @@
             </div>
           </form>
         </div>
-      </div>
-    </div>
-
-    <!-- Filter Modal -->
-    <div
-      class="modal fade"
-      id="filterModal"
-      tabindex="-1"
-      aria-labelledby="filterModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <form id="filterForm">
-          <div class="modal-content">
-            <div class="modal-header bg-info">
-              <h5 class="modal-title" id="filterModalLabel">
-                Filter Categories <i class="fa-solid fa-sliders"></i>
-              </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <div class="mb-3">
-                <label for="names" class="form-label"
-                  >Names <span style="color: red">*</span></label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="names"
-                  name="names"
-                  placeholder="home, clothes"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <label for="max_amount" class="form-label">Max Amount</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="max_amount"
-                  name="max_amount"
-                  placeholder="500"
-                />
-              </div>
-              <div class="mb-3">
-                <label for="period_day" class="form-label"
-                  >Period (in days)</label
-                >
-                <input
-                  type="number"
-                  class="form-control"
-                  id="period_day"
-                  name="period_day"
-                  placeholder="7"
-                />
-              </div>
-
-              <div class="mb-3">
-                <label for="created_at" class="form-label">Start Date</label>
-                <input
-                  type="date"
-                  class="form-control"
-                  id="created_at"
-                  name="created_at"
-                />
-              </div>
-
-              <div class="mb-3">
-                <label for="end_date" class="form-label">End Date</label>
-                <input
-                  type="date"
-                  class="form-control"
-                  id="end_date"
-                  name="end_date"
-                />
-              </div>
-            </div>
-            <button
-              type="submit"
-              class="btn btn-success large"
-              style="margin: 50px"
-            >
-              Get
-            </button>
-          </div>
-        </form>
       </div>
     </div>
 
