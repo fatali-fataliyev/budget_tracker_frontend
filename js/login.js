@@ -1,9 +1,27 @@
 let token = localStorage.getItem("bt_auth_token");
 
-if (token !== null) {
-  window.location.href = "./dashboard.html";
+if (token) {
+  $.ajax({
+    url: `${BASE_URL}/check-token`,
+    type: "GET",
+    headers: {
+      Authorization: `${token}`,
+    },
+    success: function (response) {
+      window.location.href = "/dashboard.html";
+      console.log("token is valid");
+    },
+    error: function () {
+      localStorage.removeItem("bt_auth_token");
+      localStorage.removeItem("rememberRedirect");
+      showNotification("Your token is malformed, please login again.");
+      setTimeout(() => {
+        window.location.href = "/login.html";
+      }, 1000);
+      return;
+    },
+  });
 }
-
 
 function showNotification(message, type = "error") {
   const id = "notif-" + Date.now(); // unique-id
@@ -33,12 +51,9 @@ function showNotification(message, type = "error") {
 }
 
 $(document).ready(function () {
-  
   $("#password-toggle").on("change", function () {
     $("#password").attr("type", this.checked ? "text" : "password");
   });
-
-  // form submission:
 
   $("#login-form").on("submit", function (e) {
     e.preventDefault();
@@ -46,9 +61,8 @@ $(document).ready(function () {
     const username = $("#username").val();
     const password = $("#password").val();
 
-    // send credentials to server:
     $.ajax({
-      url: "http://localhost:8060/login",
+      url: `${BASE_URL}/login`,
       method: "POST",
       contentType: "application/json",
       data: JSON.stringify({ username, password }),
@@ -62,9 +76,9 @@ $(document).ready(function () {
       error: function (xhr) {
         const res = xhr.responseJSON;
         if (res.is_feedback) {
-          showNotification("Sorry! Something went wrong.", "error");
+          showNotification("Sorry! Something went wrong.");
         } else {
-          showNotification(res.message, "error");
+          showNotification(res.message);
         }
       },
     });

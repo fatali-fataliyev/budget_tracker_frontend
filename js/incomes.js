@@ -25,8 +25,30 @@ function showNotification(message, type = "error") {
   }, 3000);
 }
 
-if (!localStorage.getItem("bt_auth_token")) {
+let token = localStorage.getItem("bt_auth_token");
+
+if (!token) {
   window.location.href = "/login.html";
+} else {
+  $.ajax({
+    url: `${BASE_URL}/check-token`,
+    type: "GET",
+    headers: {
+      Authorization: `${token}`,
+    },
+    success: function (response) {
+      console.log("token is valid");
+    },
+    error: function () {
+      localStorage.removeItem("bt_auth_token");
+      localStorage.removeItem("rememberRedirect");
+      showNotification("Please login again.");
+      setTimeout(() => {
+        window.location.href = "/login.html";
+      }, 1000);
+      return;
+    },
+  });
 }
 
 $.ajaxSetup({
